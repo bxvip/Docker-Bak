@@ -1,0 +1,26 @@
+#https://hub.docker.com/_/redmine/
+version: '3.1'
+services:
+  redmine:
+    image: redmine
+    restart: always
+    ports:
+      - 9000:3000
+    environment:
+      REDMINE_DB_MYSQL: db_mysq
+      REDMINE_DB_PASSWORD: redmine
+  db_mysq:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: redmine
+      MYSQL_DATABSE: redmine
+
+#  db_postgres:
+#    image: postgres:9.6
+#    restart: always
+#    environment:
+#      POSTGRES_PASSWORD: redmine #
+#      POSTGRES_USER: vic
+#      POSTGRES_DB: redmine
+#      PGDATA: /home/vic/postgresql/data

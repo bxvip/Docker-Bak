@@ -1,0 +1,16 @@
+# postgres docker-compose.yml 配置
+version: '3.1'
+services:
+  db_postgres:
+    image: postgres:9.6
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example #
+      POSTGRES_USER: vic
+      POSTGRES_DB: table_postger
+      PGDATA: /home/vic/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

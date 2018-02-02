@@ -1,0 +1,22 @@
+# django-mysql 配置
+
+db:
+  image: mysql
+  expose:
+    - "3306"
+  volumes:
+    - ./db:/var/lib/mysql
+  environment:
+    - MYSQL_DATABASE=bxvip_android
+    - MYSQL_USER=android
+    - MYSQL_PASSWORD=android
+
+web:
+  build:
+  command: python ./mysite/manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - db

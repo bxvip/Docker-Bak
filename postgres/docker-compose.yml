@@ -4,8 +4,9 @@ services:
   db_postgres:
     image: postgres:9.6
     restart: always
+    container_name: local_postgres
     environment:
-      POSTGRES_PASSWORD: example #
+      POSTGRES_PASSWORD: android
       POSTGRES_USER: vic
       POSTGRES_DB: table_postger
       PGDATA: /home/vic/postgresql/data

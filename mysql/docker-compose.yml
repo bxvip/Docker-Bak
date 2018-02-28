@@ -8,6 +8,9 @@ services:
     ports:
       - "3306:3306"
     restart: always
+    volumes:
+      - ./root:/root
+      - ./data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: android
 #      MYSQL_DATABASE: root

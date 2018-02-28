@@ -13,4 +13,4 @@ sentinel:
     - SENTINEL_FAILOVER=5000
   links:
     - master:redis-master
-- slave
+    - slave

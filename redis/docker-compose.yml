@@ -4,7 +4,7 @@ services:
   redis:
     image: 'bitnami/redis:latest'
     environment:
-      - REDIS_PASSWORD=android
+      - ALLOW_EMPTY_PASSWORD=yes
     labels:
       kompose.service.type: nodeport
     ports:

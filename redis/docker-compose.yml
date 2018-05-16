@@ -1,16 +1,19 @@
-# redis 集群配置
-master:
-  image: redis:3
-slave:
-  image: redis:3
-  command: redis-server --slaveof redis-master 6379
-  links:
-    - master:redis-master
-sentinel:
-  build: sentinel
-  environment:
-    - SENTINEL_DOWN_AFTER=5000
-    - SENTINEL_FAILOVER=5000
-  links:
-    - master:redis-master
-    - slave
+
+version: '2'
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_PASSWORD=android
+      #- REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    labels:
+      kompose.service.type: nodeport
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis'
+
+volumes:
+  redis_data:
+driver: local

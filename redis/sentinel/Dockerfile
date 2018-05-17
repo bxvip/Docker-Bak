@@ -1,6 +1,6 @@
 FROM redis:3
 
-MAINTAINER Jay Chou <bxvipsky@gmail.com>
+MAINTAINER Jay Zhou <bxvipsky@gmail.com>
 
 EXPOSE 26379
 ADD sentinel.conf /etc/redis/sentinel.conf

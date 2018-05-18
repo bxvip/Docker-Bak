@@ -1,15 +1,38 @@
-master:
-  image: redis:3
-slave:
-  image: redis:3
-  command: redis-server --slaveof redis-master 6379
-  links:
-    - master:redis-master
-sentinel:
-  build: sentinel
-  environment:
-    - SENTINEL_DOWN_AFTER=5000
-    - SENTINEL_FAILOVER=5000    
-  links:
-    - master:redis-master
-    - slave
+version: '2'
+services:
+    remaster:
+##        image: redis
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: master
+        ports:
+          - "6379:6379"
+        restart: always
+        expose:
+            - 6379
+##        command: /bin/bash -c "redis-server /etc/redis/redis.conf"
+    slave6380:
+        image: redis
+        container_name: slave01
+        ports:
+          - "6380:6379"
+        restart: always
+        expose:
+            - 6379
+        command: /bin/bash -c "sleep 2 && redis-server --port 6380 --slaveof remaster 6379"
+        depends_on:
+          - remaster
+    slave6381:
+        image: redis
+        container_name: slave02
+        ports:
+          - "6381:6379"
+        restart: always
+        expose:
+            - 6379
+        command: /bin/bash -c "sleep 2 && redis-server --port 6381 --slaveof remaster 6379"
+        depends_on:
+          - remaster
+networks:
+    backend:

@@ -1,6 +1,7 @@
 version: "2"
 services:
   rabbit_node_1:
+    restart: always
     environment:
     - RABBITMQ_ERLANG_COOKIE='secret_cookie'
     networks:
@@ -16,6 +17,7 @@ services:
     - ./conf/:/etc/rabbitmq/
     command:  bash -c "sleep 10; rabbitmq-server;"
   rabbit_node_2:
+    restart: always
     environment:
     - RABBITMQ_ERLANG_COOKIE='secret_cookie'
     networks:

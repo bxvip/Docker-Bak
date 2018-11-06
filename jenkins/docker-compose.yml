@@ -1,16 +1,13 @@
-#https://github.com/jenkinsci/docker/blob/587b2856cd225bb152c4abeeaaa24934c75aa460/Dockerfile
 version: '2'
 services:
   jenkins:
-    image: jenkins/jenkins:latest
-    container_name: jenkins
-    user: android
-    volumes:
-      - /data/jenkins:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     environment:
-      JENKINS_HOST_HOME: "/data/jenkins"
+      JENKINS_HOME: "/var/jenkins_home"
+      JENKINS_VERSION: "2.138.2"
+    command: /usr/local/start.sh
     ports:
-      - "8080:8080"
-      - "5000:5000"
-      - "50000:50000"
+      - "8085:8085"

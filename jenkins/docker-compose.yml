@@ -5,9 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    environment:
-      JENKINS_HOME: "/var/jenkins_home"
-      JENKINS_VERSION: "2.138.2"
     command: /usr/local/start.sh
     ports:
       - "8085:8085"

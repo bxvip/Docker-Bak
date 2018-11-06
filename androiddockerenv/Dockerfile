@@ -22,11 +22,11 @@ ENV TERM dumb
 # GRADLE INSTALL
 WORKDIR ${USR_LOCAL}
 ENV GRADLE_URL http://services.gradle.org/distributions/gradle-4.4-all.zip
-ADD ${GRADLE_URL } gradle-4.4-bin.zip
+ADD ${GRADLE_URL} gradle-4.4-bin.zip
 RUN unzip gradle-4.4-bin.zip && ln -s gradle-4.4 gradle
 ENV GRADLE_HOME ${USR_LOCAL}/gradle
 
-#config gradle path
+# Config Gradle PATH
 RUN echo "export PATH=${PATH}:${GRADLE_HOME}/bin" >> /etc/profile
 ENV PATH ${PATH}:${GRADLE_HOME}/bin
 

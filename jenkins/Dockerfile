@@ -14,7 +14,6 @@ RUN curl -fL http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.w
 COPY /etc/scripts/jenkins.sh /usr/local/bin/jenkins.sh
 RUN chmod a+x /usr/local/bin/jenkins.sh
 VOLUME ${JENKINS_HOME}
-EXPOSE 8085
 
 # Copy start script
 COPY /etc/scripts/start.sh /usr/local/start.sh

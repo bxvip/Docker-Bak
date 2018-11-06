@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --on-install-recommends unzip git curl && rm -rf /var/lib/apt/lists/*
 
 ARG user=jenkins
 ARG group=jenkins
@@ -73,9 +73,7 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
-RUN apt-get update -qq && \
-    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl && \
-    apt-get clean
+RUN apt-get clean
 
 # DOWNLOAD ANDROID SDK
 ENV USR_LOCAL /usr/local

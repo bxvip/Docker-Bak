@@ -1,8 +1,8 @@
 FROM bxvip/androidenv:v1.0
 MAINTAINER vic "bxvipsky@gmail.com"
 
-WORKDIR ${USR_LOCAL}
-
+ENV JENKINS_HOME /var/jenkins_home
+ENV JENKINS_VERSION 2.138.2
 ENV JENKINS_UC https://updates.jenkins-ci.org
 ENV COPY_REFERENCE_FILE_LOG /var/log/copy_reference_file.log
 RUN useradd -d "${JENKINS_HOME}" -u 1000 -m -s /bin/bash jenkins

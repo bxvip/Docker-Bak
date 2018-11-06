@@ -74,7 +74,7 @@ COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 # DOWNLOAD ANDROID SDK
-ENV USR_LOCAL /usr/local
+ENV USR_LOCAL /var/jenkins_home
 ENV ANDROID_SDK_URL http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 RUN curl -L "${ANDROID_SDK_URL}" | tar --no-same-owner -xz -C ${USR_LOCAL}
 ENV ANDROID_HOME ${USR_LOCAL}/android-sdk-linux

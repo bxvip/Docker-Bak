@@ -12,7 +12,7 @@ RUN curl -L "${ANDROID_SDK_URL}" | tar --no-same-owner -xz -C ${USR_LOCAL}
 ENV ANDROID_HOME ${USR_LOCAL}/android-sdk-linux
 ENV ANDROID_SDK ${USR_LOCAL}/android-sdk-linux
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-RUN echo "export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOMOE}/platform-tools" >> /ect/profile
+RUN echo "export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOMOE}/platform-tools" >> /etc/profile
 
 ENV ANDROID_SDK_COMPONENTS tools,platform-tools,build-tools-26.0.2,android-26,extra-android-m2repository,extra-google-m2repository
 
@@ -27,7 +27,7 @@ RUN unzip gradle-4.4-bin.zip && ln -s gradle-4.4 gradle
 ENV GRADLE_HOME ${USR_LOCAL}/gradle
 
 #config gradle path
-RUN echo "export PATH=${PATH}:${GRADLE_HOME}/bin" >> /ect/profile
+RUN echo "export PATH=${PATH}:${GRADLE_HOME}/bin" >> /etc/profile
 ENV PATH ${PATH}:${GRADLE_HOME}/bin
 
 #http://ftp-nyc.osuosl.org/pub/jenkins/war-stable/2.138.2/jenkins.war

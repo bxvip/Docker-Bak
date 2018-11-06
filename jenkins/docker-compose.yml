@@ -6,5 +6,3 @@ services:
       dockerfile: Dockerfile
     restart: always
     command: /usr/local/start.sh
-    ports:
-      - "8085:8085"

@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 MAINTAINER vic "bxvipsky@gmial.com"
 
 RUN apt-get update -qq && \
-    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl wget && \
+    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl && \
     apt-get clean
 
 # DOWNLOAD ANDROID SDK

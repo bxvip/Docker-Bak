@@ -4,6 +4,7 @@ master:
   environment:
     JAVA_OPTS: "-Djava.awt.headless=true"
   restart: always
+  container_name: jenkins
   ports:
   - "50000:50000"
   - "8085:8080"

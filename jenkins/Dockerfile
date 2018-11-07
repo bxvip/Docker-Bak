@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER vic "bxvipsky@gmial.com"
-
+RUN add-apt-repository ppa:jonathonf/python-3.6
 RUN apt-get update -qq && \
     apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl python3.6 python3.6-dev python3.6-venv && \
     apt-get clean

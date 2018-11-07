@@ -6,6 +6,6 @@ master:
   restart: always
   ports:
   - "50000:50000"
-  - "8085:8085"
+  - "8085:8080"
   volumes:
   - /var/jenkins_home

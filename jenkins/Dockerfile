@@ -2,8 +2,10 @@ FROM ubuntu:16.04
 MAINTAINER vic "bxvipsky@gmial.com"
 
 RUN apt-get update -qq && \
-    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl && \
+    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl python3.6 python3.6-dev python3.6-venv && \
     apt-get clean
+
+RUN curl https://bootstrap.pypa.io/get-pip.py && python3.6 get-pip.py && ln -s /usr/bin/python3.6 /usr/local/bin/python && ln -s /usr/local/bin/pip /usr/local/bin/pip
 
 # DOWNLOAD ANDROID SDK
 ENV USR_LOCAL /usr/local

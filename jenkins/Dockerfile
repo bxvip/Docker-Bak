@@ -167,7 +167,7 @@ ENV PYTHON_PIP_VERSION 18.1
 
 RUN set -ex; \
 	\
-	wget -O get-pip.py 'https://bootstrap.pypa.io/get-pip.py'; \
+	curl 'https://bootstrap.pypa.io/get-pip.py' \
 	\
 	python get-pip.py \
 		--disable-pip-version-check \

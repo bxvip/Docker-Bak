@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM python:3.6
 MAINTAINER vic "bxvipsky@gmial.com"
 
 RUN apt-get update -qq && \
@@ -101,19 +101,3 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
-
-
-RUN apt-get update \
-    && apt-get install -y software-properties-common curl \
-    && add-apt-repository ppa:jonathonf/python-3.6 \
-    && apt-get remove -y software-properties-common \
-    && apt autoremove -y \
-    && apt-get update \
-    && apt-get install -y python3.6 \
-    && curl -o /tmp/get-pip.py "https://bootstrap.pypa.io/get-pip.py" \
-    && python3.6 /tmp/get-pip.py \
-    && apt-get remove -y curl \
-    && apt autoremove -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && ln -s python3.6 /usr/bin/python \
-    && ln -s pip /usr/bin/python

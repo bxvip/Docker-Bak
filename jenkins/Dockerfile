@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 MAINTAINER vic "bxvipsky@gmial.com"
 
 RUN apt-get update -qq && \
-    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl && \
+    apt-get install -y --on-install-recommends git openjdk-8-jdk unzip curl wget && \
     apt-get clean
 
 # DOWNLOAD ANDROID SDK
@@ -167,7 +167,7 @@ ENV PYTHON_PIP_VERSION 18.1
 
 RUN set -ex; \
 	\
-	curl 'https://bootstrap.pypa.io/get-pip.py' \
+	wget -O get-pip.py 'https://bootstrap.pypa.io/get-pip.py'; \
 	\
 	python get-pip.py \
 		--disable-pip-version-check \
@@ -183,4 +183,3 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
-

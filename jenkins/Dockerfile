@@ -114,4 +114,6 @@ RUN apt-get update \
     && python3.6 /tmp/get-pip.py \
     && apt-get remove -y curl \
     && apt autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s python3.6 /usr/bin/python \
+    && ln -s pip /usr/bin/python

@@ -105,6 +105,8 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 # add proxy config
 ARG proxy
 ARG sproxy
+ARG noproxy
 
 ENV http_proxy="$proxy"
 ENV https_proxy="$sproxy"
+ENV no_proxy="$noproxy"

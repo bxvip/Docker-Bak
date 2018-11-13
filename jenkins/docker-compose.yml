@@ -1,3 +1,4 @@
+# need local .env file
 master:
   build: .
 #  image: jenkins
@@ -10,3 +11,5 @@ master:
   - "8085:8080"
   volumes:
   - ./data_jenkins:/var/jenkins_home
+  env_file:
+  - .env

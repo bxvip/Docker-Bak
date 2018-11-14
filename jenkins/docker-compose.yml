@@ -1,7 +1,7 @@
 # need local .env file
 master:
 #  build: .
-  image: jenkins
+  image: bxvip/jenkins:v1.0
   environment:
     JAVA_OPTS: "-Djava.awt.headless=true"
   restart: always

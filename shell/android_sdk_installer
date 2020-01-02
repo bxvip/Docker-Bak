@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+echo "this sheel to use installing android_sdk  sudo su  to root "
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+echo "________________________________------start to install android_sdk-----_______________________________________________ "
+apt-get update -qq&& apt-get install -y --on-install-recommends git openjdk-8-jdk unzip wget && apt-get clean
+
+USR_LOCAL=/opt
+
+cd ${USR_LOCAL}
+# download android sdk
+echo "config Android Sdk"
+ANDROID_SDK_URL=http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
+wget "${ANDROID_SDK_URL}"
+tar -zxvf android-sdk_r24.4.1-linux.tgz
+
+rm android-sdk_r24.4.1-linux.tgz
+
+#set environment
+#set environment
+export ANDROID_HOME="${USR_LOCAL}/android-sdk-linux"
+if ! grep "ANDROID_HOME=${ANDROID_HOME}" /etc/profile
+then
+echo "ANDROID_HOME=${ANDROID_HOME}" | sudo tee -a /etc/profile
+echo "export ANDROID_HOME" | sudo tee -a /etc/profile
+
+echo "PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:$PATH" | sudo tee -a /etc/profile
+echo "export PATH" | sudo tee -a /etc/profile
+fi
+
+#update profile
+source /etc/profile
+
+ANDROID_SDK_COMPONENTS=tools,platform-tools,build-tools-26.0.2,android-26,extra-android-m2repository,extra-google-m2repository
+
+echo y | android update sdk --no-ui --all --filter "${ANDROID_SDK_COMPONENTS}"
+echo "config Android Sdk end..."
+
+echo "config Android gradle"
+GRADLE_URL=http://services.gradle.org/distributions/gradle-4.4-all.zip
+wget ${GRADLE_URL}
+unzip -d ${USR_LOCAL} gradle-4.4-all.zip
+ln -s gradle-4.4 gradle
+
+rm gradle-4.4-all.zip
+
+# set environment
+GRADLE_HOME=${USR_LOCAL}/gradle
+if ! grep "GRADLE_HOME=${GRADLE_HOME}" /etc/profile
+then
+echo "GRADLE_HOME=${GRADLE_HOME}" | sudo tee -a /etc/profile
+echo "export GRADLE_HOME" | sudo tee -a /etc/profile
+
+echo "PATH=${GRADLE_HOME}:$PATH" | sudo tee -a /etc/profile
+echo "export PATH" | sudo tee -a /etc/profile
+fi
+
+echo "config Android gradle end..."
+
+echo "________________________________------end to install android_sdk-------_______________________________________________ "

@@ -12,7 +12,7 @@ services:
       - ./root:/root
       - ./data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: android
+      MYSQL_ROOT_PASSWORD: root
 #      MYSQL_DATABASE: root
 #      MYSQL_USER: vic
 #      MYSQL_PASSWORD: android

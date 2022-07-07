@@ -1,0 +1,198 @@
+# -*- coding: utf-8 -*-
+
+# *********************************************d
+import re
+
+
+class ProtoFileInfo:
+    def __init__(self, java_pkg='', classname=''):
+        self.java_pkg = java_pkg
+        self.proto_server_name = ''
+        self.classname = classname
+        self.java_default_tool_class = ''
+        self.default_gen = False
+        self.funcList = []
+        self.messages = []
+        self.servers = []
+
+
+class ProtoService:
+    def __init__(self):
+        self.java_pkg = ''
+        self.proto_server_name = ''
+        self.classname = ''
+        self.java_default_tool_class = ''
+        self.default_gen = False
+
+
+class ProtoMessage:
+    def __init__(self):
+        # optional int32 page_number = 2;// Which page number do we want?
+        self.rule = ''  # optional
+        self.type = ''  # int32
+        self.name = ''  # page_number
+        self.index = 0  # 2
+        self.doc = ''  # // Which page number do we want?
+
+
+class ProtoFuncItem:
+    def __init__(self, func_name='', req_type='', resp_type='', doc='', auto_gen=False, java_tool_class='',
+                 java_tool_class_func=''):
+        self.func_name = func_name  # 方法名
+        self.req_type = req_type  # 请求类型
+        self.resp_type = resp_type  # 返回类型
+        self.doc = doc  # 注解
+        self.auto_gen = auto_gen  # 是否需要构建
+        self.java_tool_class = java_tool_class  # java 接口类
+        self.java_tool_class_func = java_tool_class_func  # java 方法
+
+    def get_java_tool_func(self):
+        return self.java_tool_class_func if self.java_tool_class_func != '' else self.func_name
+
+
+# *********************************************d
+# *********************************************d
+
+
+class ProtoFileParse:
+    """
+    proto file 分解
+    """
+
+    def __init__(self, filepath):
+        self.lines = []
+        self.file_path = filepath
+        self.read_index = -1
+        self.protoFile = ProtoFileInfo()
+        self.block_count = 0  # { 开始标志位
+        self.service = None
+
+        self.protoFileMap = {'service': [], 'message': []}
+
+    def read_file_lines(self):
+        with open(self.file_path, 'r', encoding='UTF-8') as file:
+            while True:
+                line = file.readline()
+                if not line:
+                    break
+                # 前后去除空格
+                line = line.strip().replace('\n', '')
+                self.lines.append(line.replace('\n', ''))
+
+                self.calc_block(line)
+                if line.startswith("//@autoGen"):
+                    self.protoFile.default_gen = True
+                # 跳过注释 注解暂时不处理
+                elif line.startswith('//'):
+                    if len(line) > 5:
+                        match = re.match(r"//@java_default_tool_class\s+(\S+)\s*", line)
+                        if match:
+                            self.protoFile.java_default_tool_class = match.group(1)
+                    continue
+                elif line.startswith('option'):
+                    match = re.match(r"option\s+(\S+)\s+=\s+(\S+)\s*.*;", line)
+                    if match:
+                        module_path = match.group(1)
+                        module_name = match.group(2)
+                        if module_path == 'java_package':
+                            self.protoFile.java_pkg = module_name.replace('"', '')
+                        elif module_path == 'java_outer_classname':
+                            self.protoFile.classname = module_name.replace('"', '')
+                elif re.match(r'(message|service)\s+([\w_]*).*', line):
+                    match = re.match(r'(message|service)\s+([\w_]*).*', line)
+                    if match:
+                        self.protoFileMap[match.group(1)].append(line)
+                elif self.block_count > 0:
+                    self.protoFileMap['service'].append(line)
+        print(self.protoFileMap)
+
+    def calc_block(self, line):
+        # 处理代码块
+        tem = self.block_count
+        flag = get_block_flag(line)
+        if flag == '{':
+            self.block_count += 1
+        elif self.block_count > 0 and flag == '}':
+            self.block_count -= 1
+        print(tem, ' => ', self.block_count, line)
+
+    def parse_proto(self):
+        self.read_file_lines()
+        for line in self.lines:
+            print(line)
+            self.read_index += 1
+            # 前后去除空格
+            line = line.strip()
+            if line.startswith("//@autoGen"):
+                self.protoFile.default_gen = True
+            # 跳过注释
+            elif line.startswith('//'):
+                if len(line) > 5:
+                    match = re.match(r"//@java_default_tool_class\s+(\S+)\s*", line)
+                    if match:
+                        self.protoFile.java_default_tool_class = match.group(1)
+                continue
+            elif line.startswith('option'):
+                match = re.match(r"option\s+(\S+)\s+=\s+(\S+)\s*.*;", line)
+                if match:
+                    module_path = match.group(1)
+                    module_name = match.group(2)
+                    if module_path == 'java_package':
+                        self.protoFile.java_pkg = module_name.replace('"', '')
+                    elif module_path == 'java_outer_classname':
+                        self.protoFile.classname = module_name.replace('"', '')
+            elif line.startswith('service') or self.service_start:
+                self.parse_service(line)
+
+    def parse_service(self, line):
+        """
+            service FileManager {
+                rpc xxx(xx) returns xxx{} // doc
+            }
+        :return:
+        """
+        if not self.service_start:
+            self.service = ProtoService()
+            # 标志开始位置
+        self.service_start = True
+        if line.startswith('service'):
+            # service Rom {
+            match = re.match(r'\s*(\S+)\s+([A-Za-z0-9_]*)\s*(.*)', line)
+            if match:
+                service = match.group(1)
+                name = match.group(2)
+                self.service.proto_server_name = match.group(2)
+                doc = match.group(3)
+                print('hahhaha', service, name, doc)
+                if doc.startswith('{'):
+                    self.block_count += 1
+
+
+# *********************************************d
+# /**
+# * 处理注释 groovy代码
+# * @param text
+# * @return
+# */
+def del_comment(content, sub_space=True):
+    out = re.sub(r'/\*.*?\*/', '', content, flags=re.S)
+    out = re.sub(r'(//.*)', '', out)
+    if sub_space:
+        return out.strip()
+    return out
+
+
+def get_block_flag(text, move_commet=True):
+    """
+    获取代码块的开始和结束标志
+    :return:
+    """
+    text = del_comment(text) if move_commet else text
+    match = re.match(r'[^\{^}]*([\s\{]*)[^}]*([}]*).*?', text)
+    if match:
+        return match.group(1).replace(' ', '') + '' + match.group(2)
+
+
+if __name__ == '__main__':
+    print('proto builder')
+    ProtoFileParse("test.proto").read_file_lines()
